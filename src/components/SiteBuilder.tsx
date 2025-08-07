@@ -1,523 +1,543 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ColorPicker } from "@/components/ui/color-picker";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
 import Icon from "@/components/ui/icon";
 
 const SiteBuilder = () => {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
-  const [selectedElement, setSelectedElement] = useState(null);
-  const [logoFile, setLogoFile] = useState(null);
-  const fileInputRef = useRef(null);
-  
-  const [siteSettings, setSiteSettings] = useState({
-    siteName: 'Мой Интернет-Магазин',
-    primaryColor: '#B8D4E3',
-    secondaryColor: '#FFE0E6',
-    backgroundColor: '#FEF9E7',
-    logoUrl: '',
-    description: 'Лучшие товары для вашего дома',
-    currency: '₽'
-  });
+  const [uploadedLogo, setUploadedLogo] = useState(null);
+  const [activeTab, setActiveTab] = useState('templates');
 
-  const templates = [
+  const shopTemplates = [
     {
       id: 1,
-      name: 'Модный Бутик',
-      category: 'Одежда',
-      preview: '/api/placeholder/300/200',
+      name: 'Модный бутик',
+      category: 'Одежда и мода',
       description: 'Элегантный дизайн для магазинов одежды и аксессуаров',
-      features: ['Галерея товаров', 'Фильтры', 'Корзина', 'Wishlist'],
-      colors: { primary: '#FFE0E6', secondary: '#B8D4E3' }
+      preview: '/api/placeholder/400/300',
+      colors: ['#FFB6C1', '#87CEEB', '#F0F8FF'],
+      features: ['Каталог товаров', 'Корзина', 'Фильтры', 'Отзывы']
     },
     {
       id: 2,
-      name: 'Техно Маркет',
-      category: 'Электроника',
-      preview: '/api/placeholder/300/200',
-      description: 'Современный дизайн для магазинов электроники',
-      features: ['Сравнение товаров', 'Спецификации', 'Отзывы', 'Гарантия'],
-      colors: { primary: '#B8D4E3', secondary: '#E8F4FD' }
+      name: 'Электроника Pro',
+      category: 'Техника',
+      description: 'Modern дизайн для магазинов электроники и гаджетов',
+      preview: '/api/placeholder/400/300',
+      colors: ['#B0E0E6', '#FFB6C1', '#F5F5F5'],
+      features: ['Сравнение товаров', 'Рейтинги', 'Техподдержка', 'Гарантия']
     },
     {
       id: 3,
-      name: 'Eco Store',
-      category: 'Экотовары',
-      preview: '/api/placeholder/300/200',
-      description: 'Натуральный дизайн для эко-товаров и органической продукции',
-      features: ['Сертификаты', 'Происхождение', 'Экодоставка', 'Подписка'],
-      colors: { primary: '#E8F5E8', secondary: '#F0F8F0' }
+      name: 'Косметика Люкс',
+      category: 'Красота',
+      description: 'Изящный дизайн для магазинов косметики и парфюмерии',
+      preview: '/api/placeholder/400/300',
+      colors: ['#FFB6C1', '#DDA0DD', '#F0F8FF'],
+      features: ['Виртуальная примерка', 'Подарочные наборы', 'Блог', 'Акции']
     }
   ];
 
-  const editableElements = [
-    { id: 'header', name: 'Шапка сайта', type: 'component' },
-    { id: 'banner', name: 'Главный баннер', type: 'image' },
-    { id: 'catalog', name: 'Каталог товаров', type: 'component' },
-    { id: 'footer', name: 'Подвал сайта', type: 'component' },
-    { id: 'colors', name: 'Цветовая схема', type: 'style' },
-    { id: 'fonts', name: 'Шрифты', type: 'style' },
-    { id: 'layout', name: 'Макет страницы', type: 'layout' }
+  const additionalModules = [
+    { name: 'Лента новостей', icon: 'Newspaper', active: false, description: 'Публикация новостей и статей' },
+    { name: 'Каталог статей', icon: 'BookOpen', active: false, description: 'База знаний и полезные статьи' },
+    { name: 'Поиск', icon: 'Search', active: true, description: 'Умный поиск по товарам и контенту' },
+    { name: 'Формы обратной связи', icon: 'MessageSquare', active: true, description: 'Связь с клиентами' },
+    { name: 'Пользователи', icon: 'Users', active: true, description: 'Система регистрации и профилей' },
+    { name: 'Опросы', icon: 'BarChart3', active: false, description: 'Опросы и голосования' },
+    { name: 'Фотогалерея', icon: 'Image', active: false, description: 'Галерея изображений' },
+    { name: 'Онлайн-консультант', icon: 'MessageCircle', active: false, description: 'Чат с поддержкой' },
+    { name: 'Магазин в Telegram', icon: 'Send', active: false, description: 'Интеграция с Telegram Bot' },
+    { name: 'Мобильное приложение', icon: 'Smartphone', active: false, description: 'PWA приложение' },
+    { name: 'Магазины на поддоменах', icon: 'Globe', active: false, description: 'Мультисайтовость' },
+    { name: 'Мультиязычность', icon: 'Languages', active: false, description: 'Поддержка нескольких языков' }
   ];
 
   const handleLogoUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setLogoFile(file);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setSiteSettings(prev => ({
-          ...prev,
-          logoUrl: e.target.result
-        }));
-      };
-      reader.readAsDataURL(file);
+      setUploadedLogo(URL.createObjectURL(file));
     }
   };
 
-  const handleColorChange = (colorType, color) => {
-    setSiteSettings(prev => ({
-      ...prev,
-      [colorType]: color
-    }));
-  };
-
   const applyLogoToProducts = () => {
-    // Функция для нанесения логотипа на все изображения товаров
-    console.log('Применение логотипа к товарам...', logoFile);
+    if (uploadedLogo) {
+      console.log('Применяем логотип ко всем изображениям товаров');
+    }
   };
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-4xl font-bold font-poiret">Конструктор Сайтов</h1>
-            <p className="text-muted-foreground mt-2">Создайте профессиональный интернет-магазин за несколько минут</p>
-          </div>
-          <div className="flex space-x-4">
-            <Button variant="outline">
-              <Icon name="Eye" className="mr-2" size={16} />
-              Предпросмотр
-            </Button>
-            <Button>
-              <Icon name="Save" className="mr-2" size={16} />
-              Сохранить
-            </Button>
-          </div>
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold font-poiret">Конструктор сайтов</h1>
+          <p className="text-muted-foreground font-inter">
+            Создайте профессиональный интернет-магазин за несколько минут
+          </p>
         </div>
+        <Button size="lg">
+          <Icon name="Rocket" className="mr-2" size={20} />
+          Опубликовать сайт
+        </Button>
+      </div>
 
-        <Tabs defaultValue="templates" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="templates" className="font-poiret">Шаблоны</TabsTrigger>
-            <TabsTrigger value="editor" className="font-poiret">Редактор</TabsTrigger>
-            <TabsTrigger value="settings" className="font-poiret">Настройки</TabsTrigger>
-            <TabsTrigger value="modules" className="font-poiret">Модули</TabsTrigger>
-          </TabsList>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="templates" className="font-poiret">Шаблоны</TabsTrigger>
+          <TabsTrigger value="editor" className="font-poiret">Редактор</TabsTrigger>
+          <TabsTrigger value="modules" className="font-poiret">Модули</TabsTrigger>
+          <TabsTrigger value="branding" className="font-poiret">Брендинг</TabsTrigger>
+          <TabsTrigger value="settings" className="font-poiret">Настройки</TabsTrigger>
+        </TabsList>
 
-          <TabsContent value="templates" className="space-y-6 mt-6">
-            <div>
-              <h2 className="text-2xl font-bold font-poiret mb-4">Выберите шаблон</h2>
-              <p className="text-muted-foreground mb-6">Все шаблоны бесплатны и адаптивны. Вы можете изменить дизайн в любое время.</p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {templates.map((template) => (
-                <Card 
-                  key={template.id} 
-                  className={`cursor-pointer transition-all hover:shadow-lg ${
-                    selectedTemplate === template.id ? 'ring-2 ring-primary' : ''
-                  }`}
-                  onClick={() => setSelectedTemplate(template.id)}
-                >
-                  <div className="aspect-video bg-gradient-to-br from-primary to-secondary rounded-t-lg flex items-center justify-center">
-                    <div className="text-center">
-                      <Icon name="ShoppingBag" size={48} className="mx-auto mb-2" />
-                      <div className="text-lg font-poiret">{template.name}</div>
+        <TabsContent value="templates" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="font-poiret">Выберите шаблон для вашего магазина</CardTitle>
+              <CardDescription className="font-inter">
+                Все шаблоны адаптивные и бесплатные. Вы можете поменять дизайн в любое время.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {shopTemplates.map((template) => (
+                  <Card 
+                    key={template.id} 
+                    className={`cursor-pointer transition-all hover:shadow-lg ${
+                      selectedTemplate?.id === template.id ? 'ring-2 ring-primary' : ''
+                    }`}
+                    onClick={() => setSelectedTemplate(template)}
+                  >
+                    <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 rounded-t-lg flex items-center justify-center">
+                      <div className="text-center">
+                        <Icon name="Monitor" size={48} className="text-primary mx-auto mb-2" />
+                        <p className="font-poiret text-lg">{template.name}</p>
+                      </div>
                     </div>
-                  </div>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg font-poiret">{template.name}</CardTitle>
-                      <Badge variant="secondary">{template.category}</Badge>
-                    </div>
-                    <CardDescription>{template.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <div className="space-y-3">
-                      <div>
-                        <div className="text-sm font-medium mb-2">Особенности:</div>
+                    <CardHeader className="pb-2">
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-lg font-poiret">{template.name}</CardTitle>
+                        <Badge variant="secondary" className="text-xs">
+                          {template.category}
+                        </Badge>
+                      </div>
+                      <CardDescription className="font-inter">
+                        {template.description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="flex space-x-2">
+                          {template.colors.map((color, idx) => (
+                            <div
+                              key={idx}
+                              className="w-6 h-6 rounded-full border"
+                              style={{ backgroundColor: color }}
+                            />
+                          ))}
+                        </div>
                         <div className="flex flex-wrap gap-1">
-                          {template.features.map((feature, idx) => (
+                          {template.features.slice(0, 2).map((feature, idx) => (
                             <Badge key={idx} variant="outline" className="text-xs">
                               {feature}
                             </Badge>
                           ))}
+                          {template.features.length > 2 && (
+                            <Badge variant="outline" className="text-xs">
+                              +{template.features.length - 2} еще
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="flex space-x-2">
+                          <Button 
+                            className="flex-1" 
+                            size="sm"
+                            onClick={() => setActiveTab('editor')}
+                          >
+                            Выбрать
+                          </Button>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" size="sm">
+                                <Icon name="Eye" size={14} />
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-4xl">
+                              <DialogHeader>
+                                <DialogTitle className="font-poiret">
+                                  Предпросмотр: {template.name}
+                                </DialogTitle>
+                                <DialogDescription className="font-inter">
+                                  {template.description}
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="aspect-video bg-gradient-to-br from-primary/10 to-secondary/10 rounded-lg flex items-center justify-center">
+                                <p className="text-muted-foreground font-inter">
+                                  Здесь будет предпросмотр шаблона
+                                </p>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
                         </div>
                       </div>
-                      <Button 
-                        className="w-full" 
-                        variant={selectedTemplate === template.id ? 'default' : 'outline'}
-                      >
-                        {selectedTemplate === template.id ? 'Выбран' : 'Выбрать'}
-                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="editor" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="font-poiret">Визуальный редактор</CardTitle>
+                  <CardDescription className="font-inter">
+                    Редактируйте ваш сайт в режиме реального времени
+                  </CardDescription>
+                </div>
+                <div className="flex space-x-2">
+                  <Button variant="outline" size="sm">
+                    <Icon name="Smartphone" size={16} className="mr-2" />
+                    Мобильная версия
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Icon name="Monitor" size={16} className="mr-2" />
+                    Десктоп
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid lg:grid-cols-4 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold font-poiret mb-3">Элементы</h3>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { name: 'Текст', icon: 'Type' },
+                        { name: 'Изображение', icon: 'Image' },
+                        { name: 'Кнопка', icon: 'MousePointer' },
+                        { name: 'Товары', icon: 'Package' },
+                        { name: 'Форма', icon: 'FileText' },
+                        { name: 'Видео', icon: 'Video' }
+                      ].map((element, idx) => (
+                        <Button
+                          key={idx}
+                          variant="outline"
+                          size="sm"
+                          className="h-12 flex-col"
+                        >
+                          <Icon name={element.icon as any} size={16} />
+                          <span className="text-xs mt-1">{element.name}</span>
+                        </Button>
+                      ))}
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
+                  </div>
 
-          <TabsContent value="editor" className="space-y-6 mt-6">
-            <div className="grid lg:grid-cols-4 gap-6">
-              {/* Панель элементов */}
-              <Card className="lg:col-span-1">
-                <CardHeader>
-                  <CardTitle className="font-poiret">Элементы сайта</CardTitle>
-                  <CardDescription>Выберите элемент для редактирования</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  {editableElements.map((element) => (
-                    <Button
-                      key={element.id}
-                      variant={selectedElement === element.id ? 'default' : 'ghost'}
-                      className="w-full justify-start"
-                      onClick={() => setSelectedElement(element.id)}
-                    >
-                      <Icon 
-                        name={
-                          element.type === 'component' ? 'Layout' :
-                          element.type === 'image' ? 'Image' :
-                          element.type === 'style' ? 'Palette' : 'Settings'
-                        } 
-                        className="mr-2" 
-                        size={16} 
-                      />
-                      {element.name}
-                    </Button>
-                  ))}
-                </CardContent>
-              </Card>
+                  <Separator />
 
-              {/* Область предпросмотра */}
-              <Card className="lg:col-span-2">
-                <CardHeader>
-                  <CardTitle className="font-poiret">Предпросмотр</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="bg-muted rounded-lg p-6 min-h-[500px] border-2 border-dashed border-muted-foreground/25">
+                  <div>
+                    <h3 className="font-semibold font-poiret mb-3">Стили</h3>
+                    <div className="space-y-3">
+                      <div>
+                        <Label className="text-sm">Цвета темы</Label>
+                        <div className="flex space-x-2 mt-2">
+                          {['#87CEEB', '#FFB6C1', '#DDA0DD', '#F0F8FF'].map((color, idx) => (
+                            <button
+                              key={idx}
+                              className="w-8 h-8 rounded-full border-2 border-gray-300"
+                              style={{ backgroundColor: color }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <Label className="text-sm">Шрифты</Label>
+                        <div className="mt-2 space-y-1">
+                          <Button variant="outline" size="sm" className="w-full justify-start font-poiret">
+                            Poiret One
+                          </Button>
+                          <Button variant="outline" size="sm" className="w-full justify-start font-inter">
+                            Inter
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-3">
+                  <div className="aspect-video bg-white border-2 border-dashed border-gray-300 rounded-lg p-6">
                     {selectedTemplate ? (
-                      <div className="space-y-6">
-                        {/* Шапка */}
-                        <div className="flex items-center justify-between p-4 bg-primary/10 rounded">
-                          <div className="flex items-center space-x-2">
-                            {siteSettings.logoUrl && (
-                              <img src={siteSettings.logoUrl} alt="Logo" className="w-8 h-8 rounded" />
-                            )}
-                            <span className="font-poiret text-lg">{siteSettings.siteName}</span>
-                          </div>
-                          <div className="flex space-x-4 text-sm">
-                            <span>Каталог</span>
-                            <span>О нас</span>
-                            <span>Контакты</span>
-                          </div>
+                      <div className="space-y-4">
+                        <div className="bg-gradient-to-r from-primary/20 to-secondary/20 p-6 rounded-lg text-center">
+                          <h1 className="text-2xl font-bold font-poiret mb-2">
+                            Добро пожаловать в {selectedTemplate.name}
+                          </h1>
+                          <p className="text-muted-foreground font-inter">
+                            Кликните на элемент чтобы начать редактирование
+                          </p>
                         </div>
-                        
-                        {/* Главный баннер */}
-                        <div className="bg-secondary/20 rounded-lg p-8 text-center">
-                          <h2 className="text-2xl font-poiret mb-2">Добро пожаловать в {siteSettings.siteName}</h2>
-                          <p className="text-muted-foreground">{siteSettings.description}</p>
-                        </div>
-
-                        {/* Товары */}
                         <div className="grid grid-cols-3 gap-4">
-                          {[1, 2, 3].map((i) => (
-                            <div key={i} className="bg-card rounded-lg p-3 border">
-                              <div className="aspect-square bg-muted rounded mb-2 flex items-center justify-center">
-                                <Icon name="Package" className="text-muted-foreground" />
-                              </div>
-                              <div className="text-sm">Товар {i}</div>
-                              <div className="font-semibold">1000 {siteSettings.currency}</div>
+                          {[1, 2, 3].map((item) => (
+                            <div key={item} className="border rounded-lg p-4 hover:bg-muted/50 cursor-pointer">
+                              <div className="aspect-square bg-muted rounded mb-2"></div>
+                              <h3 className="font-semibold font-poiret text-sm">Товар {item}</h3>
+                              <p className="text-xs text-muted-foreground font-inter">1,990 ₽</p>
                             </div>
                           ))}
                         </div>
                       </div>
                     ) : (
-                      <div className="flex items-center justify-center h-full text-muted-foreground">
+                      <div className="flex items-center justify-center h-full">
                         <div className="text-center">
-                          <Icon name="MousePointer2" size={48} className="mx-auto mb-4" />
-                          <p>Выберите шаблон для начала редактирования</p>
+                          <Icon name="MousePointer" size={48} className="text-muted-foreground mx-auto mb-4" />
+                          <p className="text-muted-foreground font-inter">
+                            Выберите шаблон для начала редактирования
+                          </p>
                         </div>
                       </div>
                     )}
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-              {/* Панель свойств */}
-              <Card className="lg:col-span-1">
-                <CardHeader>
-                  <CardTitle className="font-poiret">Свойства</CardTitle>
-                  <CardDescription>
-                    {selectedElement ? `Настройки: ${editableElements.find(e => e.id === selectedElement)?.name}` : 'Выберите элемент'}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {selectedElement === 'colors' && (
-                    <div className="space-y-4">
-                      <div>
-                        <Label>Основной цвет</Label>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <div 
-                            className="w-8 h-8 rounded border border-input cursor-pointer"
-                            style={{ backgroundColor: siteSettings.primaryColor }}
-                            onClick={() => document.getElementById('primary-color').click()}
-                          />
-                          <Input
-                            id="primary-color"
-                            type="color"
-                            value={siteSettings.primaryColor}
-                            onChange={(e) => handleColorChange('primaryColor', e.target.value)}
-                            className="sr-only"
-                          />
-                          <Input
-                            value={siteSettings.primaryColor}
-                            onChange={(e) => handleColorChange('primaryColor', e.target.value)}
-                            placeholder="#B8D4E3"
-                          />
+        <TabsContent value="modules" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="font-poiret">Дополнительные модули</CardTitle>
+              <CardDescription className="font-inter">
+                Расширьте функциональность вашего сайта
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {additionalModules.map((module, idx) => (
+                  <Card key={idx} className="relative">
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div className={`p-2 rounded-lg ${
+                            module.active ? 'bg-primary/20' : 'bg-muted'
+                          }`}>
+                            <Icon 
+                              name={module.icon as any} 
+                              className={module.active ? 'text-primary' : 'text-muted-foreground'}
+                              size={20}
+                            />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold font-poiret text-sm">{module.name}</h3>
+                            <p className="text-xs text-muted-foreground font-inter">
+                              {module.description}
+                            </p>
+                          </div>
                         </div>
+                        <Badge variant={module.active ? 'default' : 'outline'} className="text-xs">
+                          {module.active ? 'Включен' : 'Выключен'}
+                        </Badge>
                       </div>
-                      <div>
-                        <Label>Вторичный цвет</Label>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <div 
-                            className="w-8 h-8 rounded border border-input cursor-pointer"
-                            style={{ backgroundColor: siteSettings.secondaryColor }}
-                            onClick={() => document.getElementById('secondary-color').click()}
-                          />
-                          <Input
-                            id="secondary-color"
-                            type="color"
-                            value={siteSettings.secondaryColor}
-                            onChange={(e) => handleColorChange('secondaryColor', e.target.value)}
-                            className="sr-only"
-                          />
-                          <Input
-                            value={siteSettings.secondaryColor}
-                            onChange={(e) => handleColorChange('secondaryColor', e.target.value)}
-                            placeholder="#FFE0E6"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                      <Button 
+                        className="w-full mt-3" 
+                        size="sm"
+                        variant={module.active ? 'outline' : 'default'}
+                      >
+                        {module.active ? 'Настроить' : 'Подключить'}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-                  {selectedElement === 'header' && (
-                    <div className="space-y-4">
-                      <div>
-                        <Label>Название сайта</Label>
-                        <Input
-                          value={siteSettings.siteName}
-                          onChange={(e) => setSiteSettings(prev => ({ ...prev, siteName: e.target.value }))}
-                          placeholder="Название вашего магазина"
+        <TabsContent value="branding" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="font-poiret">Загрузка логотипа</CardTitle>
+              <CardDescription className="font-inter">
+                Загрузите логотип и автоматически примените его ко всем изображениям товаров
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <Label className="font-inter">Загрузить логотип</Label>
+                  <div className="mt-2 border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center relative">
+                    {uploadedLogo ? (
+                      <div className="space-y-4">
+                        <img 
+                          src={uploadedLogo} 
+                          alt="Logo" 
+                          className="max-h-24 mx-auto"
                         />
+                        <p className="text-sm text-muted-foreground font-inter">Логотип загружен</p>
                       </div>
-                      <div>
-                        <Label>Логотип</Label>
-                        <div className="space-y-2">
-                          <Button
-                            variant="outline"
-                            onClick={() => fileInputRef.current?.click()}
-                            className="w-full"
-                          >
-                            <Icon name="Upload" className="mr-2" size={16} />
-                            Загрузить логотип
-                          </Button>
-                          <input
-                            ref={fileInputRef}
-                            type="file"
-                            accept="image/*"
-                            onChange={handleLogoUpload}
-                            className="hidden"
-                          />
-                          {siteSettings.logoUrl && (
-                            <div className="flex items-center space-x-2">
-                              <img src={siteSettings.logoUrl} alt="Logo preview" className="w-10 h-10 rounded border" />
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={applyLogoToProducts}
-                              >
-                                <Icon name="Stamp" className="mr-1" size={14} />
-                                Нанести на товары
-                              </Button>
-                            </div>
-                          )}
-                        </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <Icon name="Upload" size={32} className="text-muted-foreground mx-auto" />
+                        <p className="text-muted-foreground font-inter">
+                          Перетащите логотип сюда или нажмите для выбора
+                        </p>
                       </div>
-                    </div>
-                  )}
-
-                  {!selectedElement && (
-                    <div className="text-center text-muted-foreground py-8">
-                      <Icon name="Settings" size={48} className="mx-auto mb-4" />
-                      <p>Выберите элемент из списка для настройки его свойств</p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="settings" className="space-y-6 mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="font-poiret">Основные настройки</CardTitle>
-                <CardDescription>Общие параметры вашего интернет-магазина</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <div>
-                      <Label>Название магазина</Label>
-                      <Input
-                        value={siteSettings.siteName}
-                        onChange={(e) => setSiteSettings(prev => ({ ...prev, siteName: e.target.value }))}
-                        placeholder="Мой Интернет-Магазин"
-                      />
-                    </div>
-                    <div>
-                      <Label>Описание</Label>
-                      <Textarea
-                        value={siteSettings.description}
-                        onChange={(e) => setSiteSettings(prev => ({ ...prev, description: e.target.value }))}
-                        placeholder="Краткое описание вашего магазина"
-                      />
-                    </div>
-                    <div>
-                      <Label>Валюта</Label>
-                      <Select value={siteSettings.currency} onValueChange={(value) => setSiteSettings(prev => ({ ...prev, currency: value }))}>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="₽">Рубль (₽)</SelectItem>
-                          <SelectItem value="$">Доллар ($)</SelectItem>
-                          <SelectItem value="€">Евро (€)</SelectItem>
-                          <SelectItem value="₴">Гривна (₴)</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleLogoUpload}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
                   </div>
-                  
-                  <div className="space-y-4">
+                </div>
+
+                <div>
+                  <Label className="font-inter">Настройки нанесения</Label>
+                  <div className="mt-2 space-y-3">
                     <div>
-                      <Label>Домен</Label>
-                      <div className="flex space-x-2">
-                        <Input placeholder="myshop" />
-                        <Select>
-                          <SelectTrigger className="w-40">
-                            <SelectValue placeholder=".poehali.store" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value=".poehali.store">.poehali.store</SelectItem>
-                            <SelectItem value=".poehali.shop">.poehali.shop</SelectItem>
-                            <SelectItem value="custom">Свой домен</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
+                      <Label className="text-sm">Позиция логотипа</Label>
+                      <select className="w-full mt-1 p-2 border rounded font-inter">
+                        <option>Правый нижний угол</option>
+                        <option>Правый верхний угол</option>
+                        <option>Левый нижний угол</option>
+                        <option>Левый верхний угол</option>
+                        <option>По центру</option>
+                      </select>
                     </div>
                     <div>
-                      <Label>Язык сайта</Label>
-                      <Select defaultValue="ru">
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="ru">Русский</SelectItem>
-                          <SelectItem value="en">English</SelectItem>
-                          <SelectItem value="ua">Українська</SelectItem>
-                          <SelectItem value="multi">Мультиязычность</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Label className="text-sm">Размер логотипа</Label>
+                      <select className="w-full mt-1 p-2 border rounded font-inter">
+                        <option>Маленький (10%)</option>
+                        <option>Средний (15%)</option>
+                        <option>Большой (20%)</option>
+                      </select>
                     </div>
                     <div>
-                      <Label>Часовой пояс</Label>
-                      <Select defaultValue="moscow">
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="moscow">Москва (UTC+3)</SelectItem>
-                          <SelectItem value="spb">Санкт-Петербург (UTC+3)</SelectItem>
-                          <SelectItem value="ekb">Екатеринбург (UTC+5)</SelectItem>
-                          <SelectItem value="nsk">Новосибирск (UTC+7)</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Label className="text-sm">Прозрачность</Label>
+                      <input 
+                        type="range" 
+                        min="0" 
+                        max="100" 
+                        defaultValue="80"
+                        className="w-full mt-1"
+                      />
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+              </div>
 
-          <TabsContent value="modules" className="space-y-6 mt-6">
-            <div>
-              <h2 className="text-2xl font-bold font-poiret mb-4">Дополнительные модули</h2>
-              <p className="text-muted-foreground mb-6">Расширьте функциональность вашего интернет-магазина</p>
-            </div>
+              <div className="flex justify-between items-center pt-4 border-t">
+                <p className="text-sm text-muted-foreground font-inter">
+                  {uploadedLogo ? 'Логотип будет применен ко всем изображениям товаров' : 'Сначала загрузите логотип'}
+                </p>
+                <Button 
+                  onClick={applyLogoToProducts}
+                  disabled={!uploadedLogo}
+                >
+                  <Icon name="Brush" className="mr-2" size={16} />
+                  Применить ко всем товарам
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                { name: 'Лента новостей', desc: 'Публикация новостей и акций', icon: 'Newspaper', enabled: true },
-                { name: 'Каталог статей', desc: 'База знаний и полезные материалы', icon: 'BookOpen', enabled: false },
-                { name: 'Поиск', desc: 'Быстрый поиск по товарам', icon: 'Search', enabled: true },
-                { name: 'Формы обратной связи', desc: 'Заявки и обращения клиентов', icon: 'MessageSquare', enabled: true },
-                { name: 'Система пользователей', desc: 'Регистрация и личные кабинеты', icon: 'Users', enabled: true },
-                { name: 'Опросы', desc: 'Анкеты и голосования', icon: 'BarChart3', enabled: false },
-                { name: 'Фотогалерея', desc: 'Красивые галереи изображений', icon: 'Images', enabled: false },
-                { name: 'Онлайн-консультант', desc: 'Чат с посетителями сайта', icon: 'MessageCircle', enabled: true },
-                { name: 'Магазин в Telegram', desc: 'Продажи через Telegram-бот', icon: 'Send', enabled: false },
-                { name: 'Мобильное приложение', desc: 'Нативное приложение для iOS/Android', icon: 'Smartphone', enabled: false },
-                { name: 'Магазины на поддоменах', desc: 'Мульти-магазин система', icon: 'Globe', enabled: false },
-                { name: 'Мультиязычность', desc: 'Поддержка нескольких языков', icon: 'Languages', enabled: false }
-              ].map((module, index) => (
-                <Card key={index} className="hover:shadow-lg transition-shadow">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
-                          <Icon name={module.icon as any} className="text-primary" size={16} />
-                        </div>
-                        <CardTitle className="text-lg font-poiret">{module.name}</CardTitle>
-                      </div>
-                      <Badge variant={module.enabled ? 'default' : 'secondary'}>
-                        {module.enabled ? 'Включен' : 'Отключен'}
-                      </Badge>
+        <TabsContent value="settings" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="font-poiret">Общие настройки сайта</CardTitle>
+              <CardDescription className="font-inter">
+                Основные параметры вашего интернет-магазина
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <Label>Название сайта</Label>
+                    <Input placeholder="Мой интернет-магазин" className="font-inter" />
+                  </div>
+                  <div>
+                    <Label>Описание сайта</Label>
+                    <Input placeholder="Лучшие товары по доступным ценам" className="font-inter" />
+                  </div>
+                  <div>
+                    <Label>Домен</Label>
+                    <div className="flex">
+                      <Input placeholder="myshop" className="rounded-r-none font-inter" />
+                      <span className="bg-muted px-3 py-2 border border-l-0 rounded-r text-sm font-inter">
+                        .poehali.dev
+                      </span>
                     </div>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <CardDescription className="mb-4">{module.desc}</CardDescription>
-                    <Button 
-                      variant={module.enabled ? 'outline' : 'default'} 
-                      className="w-full"
-                    >
-                      {module.enabled ? 'Настроить' : 'Подключить'}
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
-        </Tabs>
-      </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <Label>Email для заказов</Label>
+                    <Input type="email" placeholder="orders@myshop.com" className="font-inter" />
+                  </div>
+                  <div>
+                    <Label>Телефон поддержки</Label>
+                    <Input placeholder="+7 (999) 123-45-67" className="font-inter" />
+                  </div>
+                  <div>
+                    <Label>Валюта магазина</Label>
+                    <select className="w-full p-2 border rounded font-inter">
+                      <option>Рубль (₽)</option>
+                      <option>Доллар ($)</option>
+                      <option>Евро (€)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="font-poiret">Публикация сайта</CardTitle>
+              <CardDescription className="font-inter">
+                Опубликуйте ваш сайт в интернете
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between p-4 border rounded-lg">
+                <div>
+                  <h3 className="font-semibold font-poiret">Тестовый домен</h3>
+                  <p className="text-sm text-muted-foreground font-inter">
+                    myshop.poehali.dev
+                  </p>
+                </div>
+                <Badge variant="secondary">Активен</Badge>
+              </div>
+              
+              <div className="flex space-x-2">
+                <Button className="flex-1">
+                  <Icon name="Globe" className="mr-2" size={16} />
+                  Подключить свой домен
+                </Button>
+                <Button variant="outline">
+                  <Icon name="Eye" className="mr-2" size={16} />
+                  Предпросмотр
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

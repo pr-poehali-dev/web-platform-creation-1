@@ -18,19 +18,23 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				'poiret': ['Poiret One', 'cursive'],
+				'inter': ['Inter', 'sans-serif'],
+			},
 			colors: {
-				border: 'hsl(var(--border))',
-				input: 'hsl(var(--input))',
-				ring: 'hsl(var(--ring))',
-				background: 'hsl(var(--background))',
-				foreground: 'hsl(var(--foreground))',
+				border: 'hsl(220 13% 91%)',
+				input: 'hsl(220 13% 91%)',
+				ring: 'hsl(195 100% 70%)',
+				background: 'hsl(0 0% 100%)', // белый фон
+				foreground: 'hsl(0 0% 0%)', // черный текст
 				primary: {
-					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					DEFAULT: 'hsl(195 100% 80%)', // нежно-голубой
+					foreground: 'hsl(0 0% 0%)' // черный текст
 				},
 				secondary: {
-					DEFAULT: 'hsl(var(--secondary))',
-					foreground: 'hsl(var(--secondary-foreground))'
+					DEFAULT: 'hsl(330 100% 85%)', // нежно-розовый  
+					foreground: 'hsl(0 0% 0%)' // черный текст
 				},
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
