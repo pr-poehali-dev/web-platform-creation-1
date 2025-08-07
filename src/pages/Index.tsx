@@ -1,9 +1,17 @@
+import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Icon from "@/components/ui/icon";
+import AdminPanel from "@/components/AdminPanel";
 
 const Index = () => {
+  const [showAdmin, setShowAdmin] = useState(false);
+
+  if (showAdmin) {
+    return <AdminPanel />;
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -11,7 +19,7 @@ const Index = () => {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-8">
-              <div className="text-xl font-bold text-primary">
+              <div className="text-xl font-bold text-primary font-poiret">
                 BusinessPlatform
               </div>
               <div className="hidden md:flex space-x-6">
@@ -24,7 +32,7 @@ const Index = () => {
             </div>
             <div className="flex items-center space-x-4">
               <Button variant="outline" size="sm">Войти</Button>
-              <Button size="sm">Начать</Button>
+              <Button size="sm" onClick={() => setShowAdmin(true)}>Начать</Button>
             </div>
           </div>
         </div>
@@ -37,16 +45,20 @@ const Index = () => {
             <Badge className="mb-6 animate-fade-in" variant="secondary">
               Комплексное решение для бизнеса
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-in">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-in font-poiret">
               Платформа для создания и управления
               <span className="text-primary block">интернет-присутствием</span>
             </h1>
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-fade-in">
+            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-fade-in font-inter">
               Создавайте сайты, управляйте продажами и маркетингом в одном месте. 
               Без технических знаний, с интеграцией CRM-систем.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-scale-in">
-              <Button size="lg" className="px-8 py-3 text-lg">
+              <Button 
+                size="lg" 
+                className="px-8 py-3 text-lg"
+                onClick={() => setShowAdmin(true)}
+              >
                 <Icon name="Rocket" className="mr-2" />
                 Создать сайт бесплатно
               </Button>
@@ -63,8 +75,8 @@ const Index = () => {
       <section className="py-20">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Всё для вашего бизнеса</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 font-poiret">Всё для вашего бизнеса</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-inter">
               Комплексные инструменты для создания и развития онлайн-присутствия
             </p>
           </div>
@@ -75,10 +87,10 @@ const Index = () => {
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <Icon name="Layout" className="text-primary" size={24} />
                 </div>
-                <CardTitle>Конструктор сайтов</CardTitle>
+                <CardTitle className="font-poiret">Конструктор сайтов</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription>
+                <CardDescription className="font-inter">
                   Drag & drop интерфейс для создания профессиональных сайтов без кода
                 </CardDescription>
               </CardContent>
@@ -89,10 +101,10 @@ const Index = () => {
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <Icon name="ShoppingCart" className="text-primary" size={24} />
                 </div>
-                <CardTitle>Онлайн-продажи</CardTitle>
+                <CardTitle className="font-poiret">Онлайн-продажи</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription>
+                <CardDescription className="font-inter">
                   Интегрированная система управления товарами и заказами
                 </CardDescription>
               </CardContent>
@@ -103,10 +115,10 @@ const Index = () => {
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <Icon name="Users" className="text-primary" size={24} />
                 </div>
-                <CardTitle>CRM интеграция</CardTitle>
+                <CardTitle className="font-poiret">CRM интеграция</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription>
+                <CardDescription className="font-inter">
                   Подключение к популярным CRM-системам для управления клиентами
                 </CardDescription>
               </CardContent>
@@ -117,10 +129,10 @@ const Index = () => {
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <Icon name="BarChart" className="text-primary" size={24} />
                 </div>
-                <CardTitle>Аналитика</CardTitle>
+                <CardTitle className="font-poiret">Аналитика</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription>
+                <CardDescription className="font-inter">
                   Подробная статистика посещений и конверсий для роста бизнеса
                 </CardDescription>
               </CardContent>
@@ -134,10 +146,10 @@ const Index = () => {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 font-poiret">
                 Конструктор сайтов нового поколения
               </h2>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-lg text-muted-foreground font-inter">
                 Создавайте профессиональные сайты за минуты, не за недели
               </p>
             </div>
@@ -149,7 +161,7 @@ const Index = () => {
                   <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
                   <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                 </div>
-                <div className="text-sm text-muted-foreground">Website Builder</div>
+                <div className="text-sm text-muted-foreground font-poiret">Website Builder</div>
               </div>
               <div className="p-8">
                 <div className="grid lg:grid-cols-3 gap-8">
@@ -157,7 +169,7 @@ const Index = () => {
                     <div className="h-40 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg flex items-center justify-center">
                       <div className="text-center">
                         <Icon name="Image" size={32} className="text-primary mx-auto mb-2" />
-                        <p className="text-sm text-muted-foreground">Hero блок</p>
+                        <p className="text-sm text-muted-foreground font-inter">Hero блок</p>
                       </div>
                     </div>
                     <div className="grid grid-cols-3 gap-4">
@@ -174,7 +186,7 @@ const Index = () => {
                   </div>
                   <div className="space-y-4">
                     <div className="p-4 border rounded-lg">
-                      <h3 className="font-semibold mb-2">Настройки блока</h3>
+                      <h3 className="font-semibold mb-2 font-poiret">Настройки блока</h3>
                       <div className="space-y-2">
                         <div className="h-6 bg-muted rounded"></div>
                         <div className="h-6 bg-muted rounded w-3/4"></div>
@@ -182,7 +194,7 @@ const Index = () => {
                       </div>
                     </div>
                     <div className="p-4 border rounded-lg">
-                      <h3 className="font-semibold mb-2">Стили</h3>
+                      <h3 className="font-semibold mb-2 font-poiret">Стили</h3>
                       <div className="grid grid-cols-4 gap-2">
                         <div className="w-8 h-8 bg-primary rounded"></div>
                         <div className="w-8 h-8 bg-secondary rounded"></div>
@@ -202,8 +214,8 @@ const Index = () => {
       <section id="pricing" className="py-20">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Прозрачные тарифы</h2>
-            <p className="text-lg text-muted-foreground">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 font-poiret">Прозрачные тарифы</h2>
+            <p className="text-lg text-muted-foreground font-inter">
               Выберите план, который подходит для вашего бизнеса
             </p>
           </div>
@@ -211,7 +223,7 @@ const Index = () => {
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             <Card className="relative">
               <CardHeader>
-                <CardTitle className="text-center">Базовый</CardTitle>
+                <CardTitle className="text-center font-poiret">Базовый</CardTitle>
                 <div className="text-center">
                   <div className="text-3xl font-bold">₽990</div>
                   <div className="text-muted-foreground">/месяц</div>
@@ -220,19 +232,19 @@ const Index = () => {
               <CardContent className="space-y-3">
                 <div className="flex items-center space-x-2">
                   <Icon name="Check" size={16} className="text-green-500" />
-                  <span>1 сайт</span>
+                  <span className="font-inter">1 сайт</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Icon name="Check" size={16} className="text-green-500" />
-                  <span>Базовые шаблоны</span>
+                  <span className="font-inter">Базовые шаблоны</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Icon name="Check" size={16} className="text-green-500" />
-                  <span>SSL сертификат</span>
+                  <span className="font-inter">SSL сертификат</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Icon name="Check" size={16} className="text-green-500" />
-                  <span>Email поддержка</span>
+                  <span className="font-inter">Email поддержка</span>
                 </div>
                 <Button className="w-full mt-6" variant="outline">Выбрать план</Button>
               </CardContent>
@@ -243,7 +255,7 @@ const Index = () => {
                 Популярный
               </Badge>
               <CardHeader>
-                <CardTitle className="text-center">Бизнес</CardTitle>
+                <CardTitle className="text-center font-poiret">Бизнес</CardTitle>
                 <div className="text-center">
                   <div className="text-3xl font-bold">₽2990</div>
                   <div className="text-muted-foreground">/месяц</div>
@@ -252,27 +264,27 @@ const Index = () => {
               <CardContent className="space-y-3">
                 <div className="flex items-center space-x-2">
                   <Icon name="Check" size={16} className="text-green-500" />
-                  <span>5 сайтов</span>
+                  <span className="font-inter">5 сайтов</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Icon name="Check" size={16} className="text-green-500" />
-                  <span>Все шаблоны</span>
+                  <span className="font-inter">Все шаблоны</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Icon name="Check" size={16} className="text-green-500" />
-                  <span>CRM интеграция</span>
+                  <span className="font-inter">CRM интеграция</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Icon name="Check" size={16} className="text-green-500" />
-                  <span>Онлайн-магазин</span>
+                  <span className="font-inter">Онлайн-магазин</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Icon name="Check" size={16} className="text-green-500" />
-                  <span>Аналитика</span>
+                  <span className="font-inter">Аналитика</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Icon name="Check" size={16} className="text-green-500" />
-                  <span>Приоритетная поддержка</span>
+                  <span className="font-inter">Приоритетная поддержка</span>
                 </div>
                 <Button className="w-full mt-6">Выбрать план</Button>
               </CardContent>
@@ -280,7 +292,7 @@ const Index = () => {
 
             <Card className="relative">
               <CardHeader>
-                <CardTitle className="text-center">Корпоративный</CardTitle>
+                <CardTitle className="text-center font-poiret">Корпоративный</CardTitle>
                 <div className="text-center">
                   <div className="text-3xl font-bold">₽9990</div>
                   <div className="text-muted-foreground">/месяц</div>
@@ -289,23 +301,23 @@ const Index = () => {
               <CardContent className="space-y-3">
                 <div className="flex items-center space-x-2">
                   <Icon name="Check" size={16} className="text-green-500" />
-                  <span>Безлимитные сайты</span>
+                  <span className="font-inter">Безлимитные сайты</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Icon name="Check" size={16} className="text-green-500" />
-                  <span>Белые лейблы</span>
+                  <span className="font-inter">Белые лейблы</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Icon name="Check" size={16} className="text-green-500" />
-                  <span>API интеграции</span>
+                  <span className="font-inter">API интеграции</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Icon name="Check" size={16} className="text-green-500" />
-                  <span>Персональный менеджер</span>
+                  <span className="font-inter">Персональный менеджер</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Icon name="Check" size={16} className="text-green-500" />
-                  <span>SLA 99.9%</span>
+                  <span className="font-inter">SLA 99.9%</span>
                 </div>
                 <Button className="w-full mt-6" variant="outline">Связаться с нами</Button>
               </CardContent>
@@ -318,8 +330,8 @@ const Index = () => {
       <section id="templates" className="py-20 bg-muted/50">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Готовые шаблоны</h2>
-            <p className="text-lg text-muted-foreground">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 font-poiret">Готовые шаблоны</h2>
+            <p className="text-lg text-muted-foreground font-inter">
               Профессиональные дизайны для любой отрасли
             </p>
           </div>
@@ -337,12 +349,12 @@ const Index = () => {
                 <div className={`h-48 ${template.color} rounded-t-lg flex items-center justify-center group-hover:scale-105 transition-transform`}>
                   <div className="text-center">
                     <Icon name="Monitor" size={48} className="text-muted-foreground mx-auto mb-2" />
-                    <div className="text-sm font-medium">{template.name}</div>
+                    <div className="text-sm font-medium font-poiret">{template.name}</div>
                   </div>
                 </div>
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg">{template.name}</CardTitle>
+                    <CardTitle className="text-lg font-poiret">{template.name}</CardTitle>
                     <Badge variant="secondary" className="text-xs">{template.category}</Badge>
                   </div>
                 </CardHeader>
@@ -362,8 +374,8 @@ const Index = () => {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Поддержка 24/7</h2>
-              <p className="text-lg text-muted-foreground">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 font-poiret">Поддержка 24/7</h2>
+              <p className="text-lg text-muted-foreground font-inter">
                 Наша команда всегда готова помочь вам добиться успеха
               </p>
             </div>
@@ -374,10 +386,10 @@ const Index = () => {
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
                     <Icon name="MessageCircle" className="text-primary" size={24} />
                   </div>
-                  <CardTitle>Онлайн-чат</CardTitle>
+                  <CardTitle className="font-poiret">Онлайн-чат</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="mb-4">
+                  <CardDescription className="mb-4 font-inter">
                     Мгновенные ответы на ваши вопросы в режиме реального времени
                   </CardDescription>
                   <Button variant="outline" className="w-full">
@@ -391,10 +403,10 @@ const Index = () => {
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
                     <Icon name="Phone" className="text-primary" size={24} />
                   </div>
-                  <CardTitle>Телефон</CardTitle>
+                  <CardTitle className="font-poiret">Телефон</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="mb-4">
+                  <CardDescription className="mb-4 font-inter">
                     Прямая линия поддержки для срочных вопросов и консультаций
                   </CardDescription>
                   <Button variant="outline" className="w-full">
@@ -408,10 +420,10 @@ const Index = () => {
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
                     <Icon name="BookOpen" className="text-primary" size={24} />
                   </div>
-                  <CardTitle>База знаний</CardTitle>
+                  <CardTitle className="font-poiret">База знаний</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="mb-4">
+                  <CardDescription className="mb-4 font-inter">
                     Подробные руководства и ответы на частые вопросы
                   </CardDescription>
                   <Button variant="outline" className="w-full">
@@ -429,8 +441,8 @@ const Index = () => {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <div className="text-xl font-bold mb-4">BusinessPlatform</div>
-              <p className="text-gray-400 mb-4">
+              <div className="text-xl font-bold mb-4 font-poiret">BusinessPlatform</div>
+              <p className="text-gray-400 mb-4 font-inter">
                 Комплексная платформа для создания и управления интернет-присутствием бизнеса.
               </p>
               <div className="flex space-x-4">
@@ -441,8 +453,8 @@ const Index = () => {
             </div>
             
             <div>
-              <h3 className="font-semibold mb-4">Продукт</h3>
-              <ul className="space-y-2 text-gray-400">
+              <h3 className="font-semibold mb-4 font-poiret">Продукт</h3>
+              <ul className="space-y-2 text-gray-400 font-inter">
                 <li><a href="#" className="hover:text-white">Конструктор сайтов</a></li>
                 <li><a href="#" className="hover:text-white">Шаблоны</a></li>
                 <li><a href="#" className="hover:text-white">Интеграции</a></li>
@@ -451,8 +463,8 @@ const Index = () => {
             </div>
             
             <div>
-              <h3 className="font-semibold mb-4">Поддержка</h3>
-              <ul className="space-y-2 text-gray-400">
+              <h3 className="font-semibold mb-4 font-poiret">Поддержка</h3>
+              <ul className="space-y-2 text-gray-400 font-inter">
                 <li><a href="#" className="hover:text-white">Справочный центр</a></li>
                 <li><a href="#" className="hover:text-white">Связаться с нами</a></li>
                 <li><a href="#" className="hover:text-white">Статус системы</a></li>
@@ -461,8 +473,8 @@ const Index = () => {
             </div>
             
             <div>
-              <h3 className="font-semibold mb-4">Компания</h3>
-              <ul className="space-y-2 text-gray-400">
+              <h3 className="font-semibold mb-4 font-poiret">Компания</h3>
+              <ul className="space-y-2 text-gray-400 font-inter">
                 <li><a href="#" className="hover:text-white">О нас</a></li>
                 <li><a href="#" className="hover:text-white">Вакансии</a></li>
                 <li><a href="#" className="hover:text-white">Пресс-центр</a></li>
@@ -472,10 +484,10 @@ const Index = () => {
           </div>
           
           <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <div className="text-gray-400">
+            <div className="text-gray-400 font-inter">
               © 2024 BusinessPlatform. Все права защищены.
             </div>
-            <div className="flex space-x-6 text-gray-400 mt-4 md:mt-0">
+            <div className="flex space-x-6 text-gray-400 mt-4 md:mt-0 font-inter">
               <a href="#" className="hover:text-white">Политика конфиденциальности</a>
               <a href="#" className="hover:text-white">Условия использования</a>
             </div>
