@@ -15,6 +15,9 @@ import Dashboard from './Dashboard';
 import CRMSystem from './CRMSystem';
 import SiteBuilder from './SiteBuilder';
 import ShopTemplates from './ShopTemplates';
+import Analytics from './Analytics';
+import MarketingTools from './MarketingTools';
+import NotificationCenter from './NotificationCenter';
 
 const AdminPanel = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -116,6 +119,12 @@ const AdminPanel = () => {
         return <ShopTemplates />;
       case 'crm':
         return <CRMSystem />;
+      case 'analytics':
+        return <Analytics />;
+      case 'marketing':
+        return <MarketingTools />;
+      case 'notifications':
+        return <NotificationCenter />;
       case 'products':
         return renderProductsSection();
       case 'orders':
@@ -598,6 +607,9 @@ const AdminPanel = () => {
     { id: 'products', name: 'Товары', icon: 'Package' },
     { id: 'orders', name: 'Заказы', icon: 'ShoppingCart' },
     { id: 'crm', name: 'CRM', icon: 'Users' },
+    { id: 'analytics', name: 'Аналитика', icon: 'TrendingUp' },
+    { id: 'marketing', name: 'Маркетинг', icon: 'Megaphone' },
+    { id: 'notifications', name: 'Уведомления', icon: 'Bell' },
     { id: 'import-export', name: 'Импорт/Экспорт', icon: 'ArrowUpDown' },
     { id: 'settings', name: 'Настройки', icon: 'Settings' }
   ];
